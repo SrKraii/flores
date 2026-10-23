@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Te quiero mucho Eli</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            min-height: 100dvh;
+            background: linear-gradient(180deg, #fff5f8 0%, #ffe8f0 40%, #ffd9e6 100%);
+            overflow-x: hidden;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Montserrat', sans-serif;
+            position: relative;
+        }
+
+        /* ===== FLORES QUE CAEN ===== */
+        .flowers-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .flower {
+            position: absolute;
+            top: -80px;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-80px) rotate(0deg) translateX(0px); opacity: 0.8; }
+            25% { transform: translateY(25vh) rotate(90deg) translateX(30px); }
+            50% { transform: translateY(50vh) rotate(180deg) translateX(-20px); }
+            75% { transform: translateY(75vh) rotate(270deg) translateX(25px); }
+            100% { transform: translateY(110vh) rotate(360deg) translateX(-10px); opacity: 0.4; }
+        }
+
+        .flower-svg {
+            filter: drop-shadow(0 2px 8px rgba(236,95,142,0.35));
+        }
+
+        /* ===== LAYOUT PRINCIPAL ===== */
+        .main-layout {
+            z-index: 10;
+            position: relative;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: clamp(15px, 3vw, 40px);
+            padding: 20px;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        /* ===== FOTOS VINTAGE ===== */
+        .photo-frame {
+            flex: 0 0 auto;
+            width: clamp(140px, 18vw, 220px);
+            background: #f5f0e8;
+            padding: 10px 10px 40px 10px;
+            box-shadow:
+                0 4px 18px rgba(216,27,96,0.22),
+                inset 0 0 20px rgba(216,27,96,0.05);
+            position: relative;
+            opacity: 0;
+            transition: transform 0.3s ease;
+        }
+
+        .photo-frame:hover {
+            transform: scale(1.03) !important;
+        }
+
+        .photo-frame.left {
+            transform: rotate(-4deg);
+            animation: photoInLeft 1s ease-out 3.8s forwards;
+        }
+
+        .photo-frame.right {
+            transform: rotate(4deg);
+            animation: photoInRight 1s ease-out 4s forwards;
+        }
+
+        @keyframes photoInLeft {
+            0% { opacity: 0; transform: rotate(-4deg) translateX(-40px) scale(0.8); }
+            100% { opacity: 1; transform: rotate(-4deg) translateX(0) scale(1); }
+        }
+
+        @keyframes photoInRight {
+            0% { opacity: 0; transform: rotate(4deg) translateX(40px) scale(0.8); }
+            100% { opacity: 1; transform: rotate(4deg) translateX(0) scale(1); }
+        }
+
+        .photo-frame img {
+            width: 100%;
+            aspect-ratio: 3/4;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+            filter: sepia(15%) contrast(1.05) brightness(1.05);
+        }
+
+        .photo-frame img.landscape {
+            object-position: 62% center;
+        }
+
+        .photo-frame .photo-placeholder {
+            width: 100%;
+            aspect-ratio: 3/4;
+            background: linear-gradient(135deg, #d7ccc8, #bcaaa4);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #795548;
+            font-size: clamp(0.6rem, 1.2vw, 0.85rem);
+            text-align: center;
+            gap: 8px;
+        }
+
+        .photo-placeholder .icon {
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+            opacity: 0.5;
+        }
+
+        .photo-caption {
+            position: absolute;
+            bottom: 8px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-family: 'Great Vibes', cursive;
+            font-size: clamp(0.75rem, 1.3vw, 1rem);
+            color: #8e2a4e;
+        }
+
+        .photo-caption.long {
+            font-size: clamp(0.7rem, 1.15vw, 0.95rem);
+            line-height: 1.2;
+            padding: 0 8px;
+        }
+
+        .photo-frame.has-long-caption {
+            padding-bottom: clamp(64px, 8vw, 80px);
+        }
+
+        .photo-frame.has-long-caption::before {
+            bottom: clamp(64px, 8vw, 80px);
+        }
+
+        /* Textura de foto antigua */
+        .photo-frame::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 40px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(0,0,0,0.05) 100%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ===== RAMO ===== */
+        .bouquet-section {
+            flex: 0 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .bouquet-wrapper {
+            position: relative;
+            width: clamp(240px, 32vw, 400px);
+            height: clamp(280px, 38vw, 460px);
+        }
+
+        .bouquet-svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 5px 25px rgba(236,95,142,0.3));
+            overflow: visible;
+        }
+
+        /* Animaciones de brote */
+        .stem-path {
+            stroke-dasharray: var(--len);
+            stroke-dashoffset: var(--len);
+            animation: drawStem 1.2s ease-out forwards;
+            animation-delay: var(--delay);
+        }
+
+        @keyframes drawStem {
+            to { stroke-dashoffset: 0; }
+        }
+
+        .leaf-item {
+            opacity: 0;
+            transform-origin: center;
+            transform: scale(0);
+            animation: leafGrow 0.6s ease-out forwards;
+            animation-delay: var(--delay);
+        }
+
+        @keyframes leafGrow {
+            0% { opacity: 0; transform: scale(0) rotate(-20deg); }
+            70% { transform: scale(1.1) rotate(5deg); }
+            100% { opacity: 1; transform: scale(1) rotate(0deg); }
+        }
+
+        .bouquet-flower-group {
+            opacity: 0;
+            transform-origin: center;
+            transform: scale(0);
+            animation: flowerBloom 0.8s cubic-bezier(0.34,1.56,0.64,1) forwards;
+            animation-delay: var(--delay);
+        }
+
+        @keyframes flowerBloom {
+            0% { opacity: 0; transform: scale(0) rotate(-30deg); }
+            60% { transform: scale(1.15) rotate(5deg); }
+            100% { opacity: 1; transform: scale(1) rotate(0deg); }
+        }
+
+        .ribbon-item {
+            opacity: 0;
+            animation: ribbonAppear 0.5s ease-out forwards;
+            animation-delay: var(--delay);
+        }
+
+        @keyframes ribbonAppear {
+            0% { opacity: 0; transform: scaleY(0); }
+            100% { opacity: 1; transform: scaleY(1); }
+        }
+
+        .bouquet-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            width: 80%;
+            height: 80%;
+            background: radial-gradient(ellipse, rgba(244,143,177,0.28), transparent 70%);
+            pointer-events: none;
+            animation: glowPulse 4s ease-in-out infinite alternate;
+            z-index: -1;
+        }
+
+        @keyframes glowPulse {
+            0% { opacity: 0.5; transform: translate(-50%,-50%) scale(1); }
+            100% { opacity: 1; transform: translate(-50%,-50%) scale(1.1); }
+        }
+
+        .bouquet-wrapper.floated {
+            animation: bouquetFloat 5s ease-in-out 3.5s infinite;
+        }
+
+        @keyframes bouquetFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+
+        /* ===== TEXTO ===== */
+        .text-section {
+            z-index: 10;
+            position: relative;
+            text-align: center;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .te-amo {
+            font-family: 'Great Vibes', cursive;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            color: #e91e63;
+            text-shadow: 2px 2px 5px rgba(216,27,96,0.25), 0 0 22px rgba(244,143,177,0.55);
+            opacity: 0;
+            margin-bottom: 5px;
+        }
+
+        .te-amo.visible {
+            animation: fadeInUp 1s ease-out forwards, heartbeat 2s ease-in-out 1.5s infinite;
+        }
+
+        .main-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: clamp(1.5rem, 3.5vw, 2.8rem);
+            color: #ad1457;
+            text-shadow: 2px 2px 5px rgba(173,20,87,0.25), 0 0 15px rgba(244,143,177,0.5);
+            opacity: 0;
+            line-height: 1.3;
+        }
+
+        .main-title.visible {
+            animation: fadeInUp 1s ease-out forwards;
+        }
+
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(25px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            15% { transform: scale(1.12); }
+            30% { transform: scale(1); }
+            45% { transform: scale(1.08); }
+            60% { transform: scale(1); }
+        }
+
+        /* ===== PARTÍCULAS ===== */
+        .sparkle {
+            position: fixed;
+            background: #f48fb1;
+            border-radius: 50%;
+            animation: sparkle 2.5s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 3;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 0.8; transform: scale(1); }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 900px) {
+            .main-layout {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .photo-frame.left {
+                transform: rotate(-3deg);
+                animation-name: photoInLeftMobile;
+            }
+
+            .photo-frame.right {
+                transform: rotate(3deg);
+                animation-name: photoInRightMobile;
+            }
+
+            @keyframes photoInLeftMobile {
+                0% { opacity: 0; transform: rotate(-3deg) translateY(-30px) scale(0.8); }
+                100% { opacity: 1; transform: rotate(-3deg) translateY(0) scale(1); }
+            }
+
+            @keyframes photoInRightMobile {
+                0% { opacity: 0; transform: rotate(3deg) translateY(30px) scale(0.8); }
+                100% { opacity: 1; transform: rotate(3deg) translateY(0) scale(1); }
+            }
+
+            .photo-frame {
+                width: clamp(130px, 40vw, 200px);
+            }
+
+            .bouquet-wrapper {
+                width: clamp(220px, 55vw, 320px);
+                height: clamp(260px, 65vw, 380px);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .photo-frame {
+                width: clamp(120px, 38vw, 180px);
+                padding: 8px 8px 32px 8px;
+            }
+
+            .photo-frame.has-long-caption {
+                padding-bottom: 70px;
+            }
+
+            .photo-frame.has-long-caption::before {
+                bottom: 70px;
+            }
+
+            .photo-caption.long {
+                font-size: 0.7rem;
+            }
+
+            .bouquet-wrapper {
+                width: clamp(200px, 60vw, 280px);
+                height: clamp(240px, 72vw, 340px);
+            }
+
+            .te-amo {
+                font-size: clamp(1.8rem, 7vw, 2.5rem);
+            }
+
+            .main-title {
+                font-size: clamp(1.3rem, 5vw, 1.8rem);
+            }
+        }
+
+        @media (max-height: 700px) {
+            .bouquet-wrapper {
+                width: clamp(180px, 28vw, 300px);
+                height: clamp(210px, 33vw, 350px);
+            }
+
+            .photo-frame {
+                width: clamp(110px, 14vw, 170px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="flowers-container" id="flowersContainer"></div>
+
+    <!-- LAYOUT PRINCIPAL: FOTO | RAMO | FOTO -->
+    <div class="main-layout">
+
+        <!-- FOTO IZQUIERDA -->
+        <div class="photo-frame left has-long-caption">
+            <img src="fotos/ojos.jpeg" alt="Tus ojos" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+            <div class="photo-placeholder" style="display:none">
+                <div class="icon">📷</div>
+                <span>Pon tu foto aquí<br><small>fotos/ojos.jpeg</small></span>
+            </div>
+            <div class="photo-caption long">Me pierdo en la profundidad de tus ojos negros y no quiero salir</div>
+        </div>
+
+        <!-- RAMO DE FLORES -->
+        <div class="bouquet-section">
+            <div class="bouquet-wrapper" id="bouquetWrapper">
+                <div class="bouquet-glow"></div>
+                <svg class="bouquet-svg" viewBox="0 0 420 500" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <radialGradient id="petalGrad1" cx="50%" cy="80%" r="70%">
+                            <stop offset="0%" stop-color="#FFE4EC"/>
+                            <stop offset="40%" stop-color="#F8A5C2"/>
+                            <stop offset="100%" stop-color="#E75480"/>
+                        </radialGradient>
+                        <radialGradient id="petalGrad2" cx="50%" cy="80%" r="70%">
+                            <stop offset="0%" stop-color="#FFF0F5"/>
+                            <stop offset="40%" stop-color="#FBB6CE"/>
+                            <stop offset="100%" stop-color="#EC5F8E"/>
+                        </radialGradient>
+                        <radialGradient id="petalGrad3" cx="50%" cy="80%" r="70%">
+                            <stop offset="0%" stop-color="#FFD9E6"/>
+                            <stop offset="40%" stop-color="#F48FB1"/>
+                            <stop offset="100%" stop-color="#C2185B"/>
+                        </radialGradient>
+                        <radialGradient id="centerGrad" cx="40%" cy="40%">
+                            <stop offset="0%" stop-color="#F48FB1"/>
+                            <stop offset="60%" stop-color="#D81B60"/>
+                            <stop offset="100%" stop-color="#880E4F"/>
+                        </radialGradient>
+                        <linearGradient id="leafGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#8BC34A"/>
+                            <stop offset="50%" stop-color="#689F38"/>
+                            <stop offset="100%" stop-color="#33691E"/>
+                        </linearGradient>
+                        <linearGradient id="ribbonGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#F06292"/>
+                            <stop offset="100%" stop-color="#AD1457"/>
+                        </linearGradient>
+                        <filter id="softShadow">
+                            <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.2"/>
+                        </filter>
+                    </defs>
+
+                    <!-- TALLOS -->
+                    <g id="stems">
+                        <path class="stem-path" style="--len:280;--delay:0s" d="M210 500 Q205 430 192 370 Q182 320 172 280" stroke="#4a7c28" stroke-width="5" fill="none" stroke-linecap="round"/>
+                        <path class="stem-path" style="--len:280;--delay:0.08s" d="M210 500 Q215 425 225 365 Q232 315 240 275" stroke="#558B2F" stroke-width="5" fill="none" stroke-linecap="round"/>
+                        <path class="stem-path" style="--len:290;--delay:0.04s" d="M210 500 Q210 430 210 360 Q210 310 210 260" stroke="#4a7c28" stroke-width="6" fill="none" stroke-linecap="round"/>
+                        <path class="stem-path" style="--len:260;--delay:0.12s" d="M210 500 Q190 435 168 372 Q152 325 140 295" stroke="#689F38" stroke-width="4" fill="none" stroke-linecap="round"/>
+                        <path class="stem-path" style="--len:260;--delay:0.16s" d="M210 500 Q230 435 252 372 Q268 325 280 295" stroke="#689F38" stroke-width="4" fill="none" stroke-linecap="round"/>
+                        <path class="stem-path" style="--len:250;--delay:0.1s" d="M210 500 Q198 440 182 388 Q170 352 158 325" stroke="#558B2F" stroke-width="4" fill="none" stroke-linecap="round"/>
+                        <path class="stem-path" style="--len:250;--delay:0.14s" d="M210 500 Q222 440 238 388 Q250 352 262 325" stroke="#558B2F" stroke-width="4" fill="none" stroke-linecap="round"/>
+                        <path class="stem-path" style="--len:220;--delay:0.2s" d="M210 500 Q200 450 190 405 Q182 375 170 350" stroke="#689F38" stroke-width="3" fill="none" stroke-linecap="round"/>
+                        <path class="stem-path" style="--len:220;--delay:0.22s" d="M210 500 Q220 450 230 405 Q238 375 250 350" stroke="#689F38" stroke-width="3" fill="none" stroke-linecap="round"/>
+                    </g>
+
+                    <!-- HOJAS -->
+                    <g id="leaves">
+                        <ellipse class="leaf-item" style="--delay:0.9s" cx="172" cy="388" rx="22" ry="10" fill="url(#leafGrad)" transform="rotate(-30 172 388)" opacity="0.9"/>
+                        <ellipse class="leaf-item" style="--delay:0.95s" cx="248" cy="380" rx="22" ry="10" fill="url(#leafGrad)" transform="rotate(28 248 380)" opacity="0.9"/>
+                        <ellipse class="leaf-item" style="--delay:1s" cx="158" cy="340" rx="18" ry="8" fill="url(#leafGrad)" transform="rotate(-42 158 340)" opacity="0.85"/>
+                        <ellipse class="leaf-item" style="--delay:1.05s" cx="262" cy="335" rx="18" ry="8" fill="url(#leafGrad)" transform="rotate(38 262 335)" opacity="0.85"/>
+                        <ellipse class="leaf-item" style="--delay:0.92s" cx="185" cy="418" rx="24" ry="10" fill="url(#leafGrad)" transform="rotate(-18 185 418)" opacity="0.88"/>
+                        <ellipse class="leaf-item" style="--delay:0.98s" cx="235" cy="412" rx="24" ry="10" fill="url(#leafGrad)" transform="rotate(22 235 412)" opacity="0.88"/>
+                        <ellipse class="leaf-item" style="--delay:1.02s" cx="148" cy="310" rx="16" ry="7" fill="url(#leafGrad)" transform="rotate(-50 148 310)" opacity="0.8"/>
+                        <ellipse class="leaf-item" style="--delay:1.08s" cx="272" cy="305" rx="16" ry="7" fill="url(#leafGrad)" transform="rotate(50 272 305)" opacity="0.8"/>
+                    </g>
+
+                    <!-- FLOR CENTRAL GRANDE (GIRASOL) -->
+                    <g class="bouquet-flower-group" style="--delay:1.7s" filter="url(#softShadow)">
+                        <g transform="translate(210,220)">
+                            <ellipse cx="0" cy="-26" rx="9.5" ry="26" fill="url(#petalGrad3)" stroke="#C2185B" stroke-width="0.3" transform="rotate(0)"/>
+                            <ellipse cx="0" cy="-26" rx="9.5" ry="26" fill="url(#petalGrad1)" stroke="#C2185B" stroke-width="0.3" transform="rotate(30)"/>
+                            <ellipse cx="0" cy="-26" rx="9.5" ry="26" fill="url(#petalGrad3)" stroke="#C2185B" stroke-width="0.3" transform="rotate(60)"/>
+                            <ellipse cx="0" cy="-26" rx="9.5" ry="26" fill="url(#petalGrad1)" stroke="#C2185B" stroke-width="0.3" transform="rotate(90)"/>
+                            <ellipse cx="0" cy="-26" rx="9.5" ry="26" fill="url(#petalGrad3)" stroke="#C2185B" stroke-width="0.3" transform="rotate(120)"/>
+                            <ellipse cx="0" cy="-26" rx="9.5" ry="26" fill="url(#petalGrad1)" stroke="#C2185B" stroke-width="0.3" transform="rotate(150)"/>
+                            <ellipse cx="0" cy="-26" rx="9.5" ry="26" fill="url(#petalGrad3)" stroke="#C2185B" stroke-width="0.3" transform="rotate(180)"/>
+                            <ellipse cx="0" cy="-26" rx="9.5" ry="26" fill="url(#petalGrad1)" stroke="#C2185B" stroke-width="0.3" transform="rotate(210)"/>
+                            <ellipse cx="0" cy="-26" rx="9.5" ry="26" fill="url(#petalGrad3)" stroke="#C2185B" stroke-width="0.3" transform="rotate(240)"/>
+                            <ellipse cx="0" cy="-26" rx="9.5" ry="26" fill="url(#petalGrad1)" stroke="#C2185B" stroke-width="0.3" transform="rotate(270)"/>
+                            <ellipse cx="0" cy="-26" rx="9.5" ry="26" fill="url(#petalGrad3)" stroke="#C2185B" stroke-width="0.3" transform="rotate(300)"/>
+                            <ellipse cx="0" cy="-26" rx="9.5" ry="26" fill="url(#petalGrad1)" stroke="#C2185B" stroke-width="0.3" transform="rotate(330)"/>
+                            <circle cx="0" cy="0" r="17" fill="url(#centerGrad)"/>
+                            <circle cx="-4" cy="-4" r="2.2" fill="#880E4F" opacity="0.5"/>
+                            <circle cx="5" cy="3" r="1.7" fill="#880E4F" opacity="0.4"/>
+                            <circle cx="-2" cy="6" r="1.3" fill="#880E4F" opacity="0.35"/>
+                            <circle cx="4" cy="-5" r="1.1" fill="#880E4F" opacity="0.3"/>
+                        </g>
+                        <animateTransform attributeName="transform" type="rotate" values="-2 210 220;2 210 220;-2 210 220" dur="5s" repeatCount="indefinite" additive="sum"/>
+                    </g>
+
+                    <!-- FLOR IZQ ARRIBA -->
+                    <g class="bouquet-flower-group" style="--delay:1.9s" filter="url(#softShadow)">
+                        <g transform="translate(140,210)">
+                            <ellipse cx="0" cy="-18" rx="7" ry="18" fill="url(#petalGrad1)" stroke="#D81B60" stroke-width="0.3" transform="rotate(0)"/>
+                            <ellipse cx="0" cy="-18" rx="7" ry="18" fill="url(#petalGrad2)" stroke="#D81B60" stroke-width="0.3" transform="rotate(60)"/>
+                            <ellipse cx="0" cy="-18" rx="7" ry="18" fill="url(#petalGrad1)" stroke="#D81B60" stroke-width="0.3" transform="rotate(120)"/>
+                            <ellipse cx="0" cy="-18" rx="7" ry="18" fill="url(#petalGrad2)" stroke="#D81B60" stroke-width="0.3" transform="rotate(180)"/>
+                            <ellipse cx="0" cy="-18" rx="7" ry="18" fill="url(#petalGrad1)" stroke="#D81B60" stroke-width="0.3" transform="rotate(240)"/>
+                            <ellipse cx="0" cy="-18" rx="7" ry="18" fill="url(#petalGrad2)" stroke="#D81B60" stroke-width="0.3" transform="rotate(300)"/>
+                            <circle cx="0" cy="0" r="9" fill="url(#centerGrad)"/>
+                            <circle cx="-1.5" cy="-1.5" r="1.2" fill="#880E4F" opacity="0.4"/>
+                        </g>
+                        <animateTransform attributeName="transform" type="rotate" values="3 140 210;-3 140 210;3 140 210" dur="4.5s" repeatCount="indefinite" additive="sum"/>
+                    </g>
+
+                    <!-- FLOR DER ARRIBA -->
+                    <g class="bouquet-flower-group" style="--delay:2s" filter="url(#softShadow)">
+                        <g transform="translate(280,205)">
+                            <ellipse cx="0" cy="-18" rx="7" ry="18" fill="url(#petalGrad2)" stroke="#D81B60" stroke-width="0.3" transform="rotate(0)"/>
+                            <ellipse cx="0" cy="-18" rx="7" ry="18" fill="url(#petalGrad1)" stroke="#D81B60" stroke-width="0.3" transform="rotate(60)"/>
+                            <ellipse cx="0" cy="-18" rx="7" ry="18" fill="url(#petalGrad2)" stroke="#D81B60" stroke-width="0.3" transform="rotate(120)"/>
+                            <ellipse cx="0" cy="-18" rx="7" ry="18" fill="url(#petalGrad1)" stroke="#D81B60" stroke-width="0.3" transform="rotate(180)"/>
+                            <ellipse cx="0" cy="-18" rx="7" ry="18" fill="url(#petalGrad2)" stroke="#D81B60" stroke-width="0.3" transform="rotate(240)"/>
+                            <ellipse cx="0" cy="-18" rx="7" ry="18" fill="url(#petalGrad1)" stroke="#D81B60" stroke-width="0.3" transform="rotate(300)"/>
+                            <circle cx="0" cy="0" r="9" fill="url(#centerGrad)"/>
+                            <circle cx="1" cy="-2" r="1" fill="#880E4F" opacity="0.4"/>
+                        </g>
+                        <animateTransform attributeName="transform" type="rotate" values="-3 280 205;3 280 205;-3 280 205" dur="4.8s" repeatCount="indefinite" additive="sum"/>
+                    </g>
+
+                    <!-- FLOR IZQ ABAJO -->
+                    <g class="bouquet-flower-group" style="--delay:2.1s" filter="url(#softShadow)">
+                        <g transform="translate(148,280)">
+                            <ellipse cx="0" cy="-15" rx="6" ry="15" fill="url(#petalGrad2)" stroke="#EC407A" stroke-width="0.3" transform="rotate(0)"/>
+                            <ellipse cx="0" cy="-15" rx="6" ry="15" fill="url(#petalGrad1)" stroke="#EC407A" stroke-width="0.3" transform="rotate(72)"/>
+                            <ellipse cx="0" cy="-15" rx="6" ry="15" fill="url(#petalGrad2)" stroke="#EC407A" stroke-width="0.3" transform="rotate(144)"/>
+                            <ellipse cx="0" cy="-15" rx="6" ry="15" fill="url(#petalGrad1)" stroke="#EC407A" stroke-width="0.3" transform="rotate(216)"/>
+                            <ellipse cx="0" cy="-15" rx="6" ry="15" fill="url(#petalGrad2)" stroke="#EC407A" stroke-width="0.3" transform="rotate(288)"/>
+                            <circle cx="0" cy="0" r="7" fill="url(#centerGrad)"/>
+                        </g>
+                        <animateTransform attributeName="transform" type="rotate" values="4 148 280;-2 148 280;4 148 280" dur="5.2s" repeatCount="indefinite" additive="sum"/>
+                    </g>
+
+                    <!-- FLOR DER ABAJO -->
+                    <g class="bouquet-flower-group" style="--delay:2.15s" filter="url(#softShadow)">
+                        <g transform="translate(272,275)">
+                            <ellipse cx="0" cy="-15" rx="6" ry="15" fill="url(#petalGrad1)" stroke="#EC407A" stroke-width="0.3" transform="rotate(0)"/>
+                            <ellipse cx="0" cy="-15" rx="6" ry="15" fill="url(#petalGrad2)" stroke="#EC407A" stroke-width="0.3" transform="rotate(72)"/>
+                            <ellipse cx="0" cy="-15" rx="6" ry="15" fill="url(#petalGrad1)" stroke="#EC407A" stroke-width="0.3" transform="rotate(144)"/>
+                            <ellipse cx="0" cy="-15" rx="6" ry="15" fill="url(#petalGrad2)" stroke="#EC407A" stroke-width="0.3" transform="rotate(216)"/>
+                            <ellipse cx="0" cy="-15" rx="6" ry="15" fill="url(#petalGrad1)" stroke="#EC407A" stroke-width="0.3" transform="rotate(288)"/>
+                            <circle cx="0" cy="0" r="7" fill="url(#centerGrad)"/>
+                        </g>
+                        <animateTransform attributeName="transform" type="rotate" values="-2 272 275;4 272 275;-2 272 275" dur="4.6s" repeatCount="indefinite" additive="sum"/>
+                    </g>
+
+                    <!-- FLOR SUP IZQ -->
+                    <g class="bouquet-flower-group" style="--delay:1.8s" filter="url(#softShadow)">
+                        <g transform="translate(168,172)">
+                            <ellipse cx="0" cy="-16" rx="6.5" ry="16" fill="url(#petalGrad1)" stroke="#D81B60" stroke-width="0.3" transform="rotate(0)"/>
+                            <ellipse cx="0" cy="-16" rx="6.5" ry="16" fill="url(#petalGrad2)" stroke="#D81B60" stroke-width="0.3" transform="rotate(51.4)"/>
+                            <ellipse cx="0" cy="-16" rx="6.5" ry="16" fill="url(#petalGrad1)" stroke="#D81B60" stroke-width="0.3" transform="rotate(102.8)"/>
+                            <ellipse cx="0" cy="-16" rx="6.5" ry="16" fill="url(#petalGrad2)" stroke="#D81B60" stroke-width="0.3" transform="rotate(154.2)"/>
+                            <ellipse cx="0" cy="-16" rx="6.5" ry="16" fill="url(#petalGrad1)" stroke="#D81B60" stroke-width="0.3" transform="rotate(205.7)"/>
+                            <ellipse cx="0" cy="-16" rx="6.5" ry="16" fill="url(#petalGrad2)" stroke="#D81B60" stroke-width="0.3" transform="rotate(257.1)"/>
+                            <ellipse cx="0" cy="-16" rx="6.5" ry="16" fill="url(#petalGrad1)" stroke="#D81B60" stroke-width="0.3" transform="rotate(308.5)"/>
+                            <circle cx="0" cy="0" r="8" fill="url(#centerGrad)"/>
+                        </g>
+                        <animateTransform attributeName="transform" type="rotate" values="2 168 172;-3 168 172;2 168 172" dur="5.5s" repeatCount="indefinite" additive="sum"/>
+                    </g>
+
+                    <!-- FLOR SUP DER -->
+                    <g class="bouquet-flower-group" style="--delay:1.85s" filter="url(#softShadow)">
+                        <g transform="translate(252,168)">
+                            <ellipse cx="0" cy="-16" rx="6.5" ry="16" fill="url(#petalGrad2)" stroke="#D81B60" stroke-width="0.3" transform="rotate(0)"/>
+                            <ellipse cx="0" cy="-16" rx="6.5" ry="16" fill="url(#petalGrad1)" stroke="#D81B60" stroke-width="0.3" transform="rotate(51.4)"/>
+                            <ellipse cx="0" cy="-16" rx="6.5" ry="16" fill="url(#petalGrad2)" stroke="#D81B60" stroke-width="0.3" transform="rotate(102.8)"/>
+                            <ellipse cx="0" cy="-16" rx="6.5" ry="16" fill="url(#petalGrad1)" stroke="#D81B60" stroke-width="0.3" transform="rotate(154.2)"/>
+                            <ellipse cx="0" cy="-16" rx="6.5" ry="16" fill="url(#petalGrad2)" stroke="#D81B60" stroke-width="0.3" transform="rotate(205.7)"/>
+                            <ellipse cx="0" cy="-16" rx="6.5" ry="16" fill="url(#petalGrad1)" stroke="#D81B60" stroke-width="0.3" transform="rotate(257.1)"/>
+                            <ellipse cx="0" cy="-16" rx="6.5" ry="16" fill="url(#petalGrad2)" stroke="#D81B60" stroke-width="0.3" transform="rotate(308.5)"/>
+                            <circle cx="0" cy="0" r="8" fill="url(#centerGrad)"/>
+                        </g>
+                        <animateTransform attributeName="transform" type="rotate" values="-2 252 168;3 252 168;-2 252 168" dur="5.3s" repeatCount="indefinite" additive="sum"/>
+                    </g>
+
+                    <!-- FLOR SUP CENTRAL -->
+                    <g class="bouquet-flower-group" style="--delay:1.75s" filter="url(#softShadow)">
+                        <g transform="translate(210,155)">
+                            <ellipse cx="0" cy="-17" rx="7" ry="17" fill="url(#petalGrad1)" stroke="#D81B60" stroke-width="0.3" transform="rotate(0)"/>
+                            <ellipse cx="0" cy="-17" rx="7" ry="17" fill="url(#petalGrad2)" stroke="#D81B60" stroke-width="0.3" transform="rotate(45)"/>
+                            <ellipse cx="0" cy="-17" rx="7" ry="17" fill="url(#petalGrad1)" stroke="#D81B60" stroke-width="0.3" transform="rotate(90)"/>
+                            <ellipse cx="0" cy="-17" rx="7" ry="17" fill="url(#petalGrad2)" stroke="#D81B60" stroke-width="0.3" transform="rotate(135)"/>
+                            <ellipse cx="0" cy="-17" rx="7" ry="17" fill="url(#petalGrad1)" stroke="#D81B60" stroke-width="0.3" transform="rotate(180)"/>
+                            <ellipse cx="0" cy="-17" rx="7" ry="17" fill="url(#petalGrad2)" stroke="#D81B60" stroke-width="0.3" transform="rotate(225)"/>
+                            <ellipse cx="0" cy="-17" rx="7" ry="17" fill="url(#petalGrad1)" stroke="#D81B60" stroke-width="0.3" transform="rotate(270)"/>
+                            <ellipse cx="0" cy="-17" rx="7" ry="17" fill="url(#petalGrad2)" stroke="#D81B60" stroke-width="0.3" transform="rotate(315)"/>
+                            <circle cx="0" cy="0" r="8.5" fill="url(#centerGrad)"/>
+                            <circle cx="-2" cy="1" r="1.2" fill="#880E4F" opacity="0.4"/>
+                        </g>
+                        <animateTransform attributeName="transform" type="rotate" values="-1 210 155;2 210 155;-1 210 155" dur="4.2s" repeatCount="indefinite" additive="sum"/>
+                    </g>
+
+                    <!-- FLOR LEJANA IZQ -->
+                    <g class="bouquet-flower-group" style="--delay:2.25s" filter="url(#softShadow)">
+                        <g transform="translate(118,248)">
+                            <ellipse cx="0" cy="-13" rx="5.5" ry="13" fill="url(#petalGrad2)" stroke="#EC407A" stroke-width="0.3" transform="rotate(0)"/>
+                            <ellipse cx="0" cy="-13" rx="5.5" ry="13" fill="url(#petalGrad1)" stroke="#EC407A" stroke-width="0.3" transform="rotate(72)"/>
+                            <ellipse cx="0" cy="-13" rx="5.5" ry="13" fill="url(#petalGrad2)" stroke="#EC407A" stroke-width="0.3" transform="rotate(144)"/>
+                            <ellipse cx="0" cy="-13" rx="5.5" ry="13" fill="url(#petalGrad1)" stroke="#EC407A" stroke-width="0.3" transform="rotate(216)"/>
+                            <ellipse cx="0" cy="-13" rx="5.5" ry="13" fill="url(#petalGrad2)" stroke="#EC407A" stroke-width="0.3" transform="rotate(288)"/>
+                            <circle cx="0" cy="0" r="6" fill="url(#centerGrad)"/>
+                        </g>
+                        <animateTransform attributeName="transform" type="rotate" values="3 118 248;-2 118 248;3 118 248" dur="5.8s" repeatCount="indefinite" additive="sum"/>
+                    </g>
+
+                    <!-- FLOR LEJANA DER -->
+                    <g class="bouquet-flower-group" style="--delay:2.3s" filter="url(#softShadow)">
+                        <g transform="translate(302,242)">
+                            <ellipse cx="0" cy="-13" rx="5.5" ry="13" fill="url(#petalGrad1)" stroke="#EC407A" stroke-width="0.3" transform="rotate(0)"/>
+                            <ellipse cx="0" cy="-13" rx="5.5" ry="13" fill="url(#petalGrad2)" stroke="#EC407A" stroke-width="0.3" transform="rotate(72)"/>
+                            <ellipse cx="0" cy="-13" rx="5.5" ry="13" fill="url(#petalGrad1)" stroke="#EC407A" stroke-width="0.3" transform="rotate(144)"/>
+                            <ellipse cx="0" cy="-13" rx="5.5" ry="13" fill="url(#petalGrad2)" stroke="#EC407A" stroke-width="0.3" transform="rotate(216)"/>
+                            <ellipse cx="0" cy="-13" rx="5.5" ry="13" fill="url(#petalGrad1)" stroke="#EC407A" stroke-width="0.3" transform="rotate(288)"/>
+                            <circle cx="0" cy="0" r="6" fill="url(#centerGrad)"/>
+                        </g>
+                        <animateTransform attributeName="transform" type="rotate" values="-3 302 242;2 302 242;-3 302 242" dur="5.6s" repeatCount="indefinite" additive="sum"/>
+                    </g>
+
+                    <!-- FLOR EXTRA IZQ CENTRAL -->
+                    <g class="bouquet-flower-group" style="--delay:2.2s" filter="url(#softShadow)">
+                        <g transform="translate(128,195)">
+                            <ellipse cx="0" cy="-11" rx="4.5" ry="11" fill="url(#petalGrad1)" stroke="#EC407A" stroke-width="0.3" transform="rotate(0)"/>
+                            <ellipse cx="0" cy="-11" rx="4.5" ry="11" fill="url(#petalGrad2)" stroke="#EC407A" stroke-width="0.3" transform="rotate(72)"/>
+                            <ellipse cx="0" cy="-11" rx="4.5" ry="11" fill="url(#petalGrad1)" stroke="#EC407A" stroke-width="0.3" transform="rotate(144)"/>
+                            <ellipse cx="0" cy="-11" rx="4.5" ry="11" fill="url(#petalGrad2)" stroke="#EC407A" stroke-width="0.3" transform="rotate(216)"/>
+                            <ellipse cx="0" cy="-11" rx="4.5" ry="11" fill="url(#petalGrad1)" stroke="#EC407A" stroke-width="0.3" transform="rotate(288)"/>
+                            <circle cx="0" cy="0" r="5" fill="url(#centerGrad)"/>
+                        </g>
+                        <animateTransform attributeName="transform" type="rotate" values="2 128 195;-3 128 195;2 128 195" dur="5s" repeatCount="indefinite" additive="sum"/>
+                    </g>
+
+                    <!-- FLOR EXTRA DER CENTRAL -->
+                    <g class="bouquet-flower-group" style="--delay:2.22s" filter="url(#softShadow)">
+                        <g transform="translate(292,190)">
+                            <ellipse cx="0" cy="-11" rx="4.5" ry="11" fill="url(#petalGrad2)" stroke="#EC407A" stroke-width="0.3" transform="rotate(0)"/>
+                            <ellipse cx="0" cy="-11" rx="4.5" ry="11" fill="url(#petalGrad1)" stroke="#EC407A" stroke-width="0.3" transform="rotate(72)"/>
+                            <ellipse cx="0" cy="-11" rx="4.5" ry="11" fill="url(#petalGrad2)" stroke="#EC407A" stroke-width="0.3" transform="rotate(144)"/>
+                            <ellipse cx="0" cy="-11" rx="4.5" ry="11" fill="url(#petalGrad1)" stroke="#EC407A" stroke-width="0.3" transform="rotate(216)"/>
+                            <ellipse cx="0" cy="-11" rx="4.5" ry="11" fill="url(#petalGrad2)" stroke="#EC407A" stroke-width="0.3" transform="rotate(288)"/>
+                            <circle cx="0" cy="0" r="5" fill="url(#centerGrad)"/>
+                        </g>
+                        <animateTransform attributeName="transform" type="rotate" values="-2 292 190;3 292 190;-2 292 190" dur="5.1s" repeatCount="indefinite" additive="sum"/>
+                    </g>
+
+                    <!-- FLOR EXTRA IZQ BAJA -->
+                    <g class="bouquet-flower-group" style="--delay:2.35s" filter="url(#softShadow)">
+                        <g transform="translate(158,310)">
+                            <ellipse cx="0" cy="-10" rx="4" ry="10" fill="url(#petalGrad1)" stroke="#EC407A" stroke-width="0.3" transform="rotate(0)"/>
+                            <ellipse cx="0" cy="-10" rx="4" ry="10" fill="url(#petalGrad2)" stroke="#EC407A" stroke-width="0.3" transform="rotate(72)"/>
+                            <ellipse cx="0" cy="-10" rx="4" ry="10" fill="url(#petalGrad1)" stroke="#EC407A" stroke-width="0.3" transform="rotate(144)"/>
+                            <ellipse cx="0" cy="-10" rx="4" ry="10" fill="url(#petalGrad2)" stroke="#EC407A" stroke-width="0.3" transform="rotate(216)"/>
+                            <ellipse cx="0" cy="-10" rx="4" ry="10" fill="url(#petalGrad1)" stroke="#EC407A" stroke-width="0.3" transform="rotate(288)"/>
+                            <circle cx="0" cy="0" r="4.5" fill="url(#centerGrad)"/>
+                        </g>
+                        <animateTransform attributeName="transform" type="rotate" values="3 158 310;-2 158 310;3 158 310" dur="5.4s" repeatCount="indefinite" additive="sum"/>
+                    </g>
+
+                    <!-- FLOR EXTRA DER BAJA -->
+                    <g class="bouquet-flower-group" style="--delay:2.38s" filter="url(#softShadow)">
+                        <g transform="translate(262,305)">
+                            <ellipse cx="0" cy="-10" rx="4" ry="10" fill="url(#petalGrad2)" stroke="#EC407A" stroke-width="0.3" transform="rotate(0)"/>
+                            <ellipse cx="0" cy="-10" rx="4" ry="10" fill="url(#petalGrad1)" stroke="#EC407A" stroke-width="0.3" transform="rotate(72)"/>
+                            <ellipse cx="0" cy="-10" rx="4" ry="10" fill="url(#petalGrad2)" stroke="#EC407A" stroke-width="0.3" transform="rotate(144)"/>
+                            <ellipse cx="0" cy="-10" rx="4" ry="10" fill="url(#petalGrad1)" stroke="#EC407A" stroke-width="0.3" transform="rotate(216)"/>
+                            <ellipse cx="0" cy="-10" rx="4" ry="10" fill="url(#petalGrad2)" stroke="#EC407A" stroke-width="0.3" transform="rotate(288)"/>
+                            <circle cx="0" cy="0" r="4.5" fill="url(#centerGrad)"/>
+                        </g>
+                        <animateTransform attributeName="transform" type="rotate" values="-3 262 305;2 262 305;-3 262 305" dur="5.3s" repeatCount="indefinite" additive="sum"/>
+                    </g>
+
+                    <!-- CINTA / LAZO -->
+                    <g class="ribbon-item" style="--delay:2.5s">
+                        <path d="M186 400 Q210 386 234 400 Q230 415 210 422 Q190 415 186 400Z" fill="url(#ribbonGrad)" opacity="0.95"/>
+                        <path d="M196 422 Q210 435 224 422" stroke="#AD1457" stroke-width="2" fill="none"/>
+                    </g>
+                    <g class="ribbon-item" style="--delay:2.6s">
+                        <path d="M194 422 Q180 452 166 476" stroke="url(#ribbonGrad)" stroke-width="4" fill="none" stroke-linecap="round"/>
+                        <path d="M226 422 Q240 452 254 476" stroke="url(#ribbonGrad)" stroke-width="4" fill="none" stroke-linecap="round"/>
+                        <ellipse cx="164" cy="479" rx="7" ry="3.5" fill="#F06292" transform="rotate(-15 164 479)"/>
+                        <ellipse cx="256" cy="479" rx="7" ry="3.5" fill="#F06292" transform="rotate(15 256 479)"/>
+                    </g>
+                </svg>
+            </div>
+        </div>
+
+        <!-- FOTO DERECHA -->
+        <div class="photo-frame right has-long-caption">
+            <img class="landscape" src="fotos/linda.jpeg" alt="La más linda" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+            <div class="photo-placeholder" style="display:none">
+                <div class="icon">📷</div>
+                <span>Pon tu foto aquí<br><small>fotos/foto2.jpg</small></span>
+            </div>
+            <div class="photo-caption long">Siempre serás la más linda aunque ya no reciba fotos…</div>
+        </div>
+    </div>
+
+    <!-- TEXTO -->
+    <div class="text-section">
+        <div class="te-amo" id="teAmo">Me encantas</div>
+        <div class="main-title" id="mainTitle">Eli</div>
+    </div>
+
+    <!-- SVG FLORES QUE CAEN (oculto) -->
+    <svg style="display:none">
+        <symbol id="petal1" viewBox="0 0 20 20">
+            <defs>
+                <radialGradient id="fp1" cx="50%" cy="70%">
+                    <stop offset="0%" stop-color="#FFE4EC"/>
+                    <stop offset="100%" stop-color="#E75480"/>
+                </radialGradient>
+            </defs>
+            <ellipse cx="10" cy="10" rx="5" ry="9" fill="url(#fp1)" stroke="#D81B60" stroke-width="0.4" opacity="0.9"/>
+        </symbol>
+        <symbol id="petal2" viewBox="0 0 20 20">
+            <defs>
+                <radialGradient id="fp2" cx="50%" cy="70%">
+                    <stop offset="0%" stop-color="#FFF0F5"/>
+                    <stop offset="100%" stop-color="#EC5F8E"/>
+                </radialGradient>
+            </defs>
+            <ellipse cx="10" cy="10" rx="5" ry="9" fill="url(#fp2)" stroke="#EC407A" stroke-width="0.4" opacity="0.9"/>
+        </symbol>
+        <symbol id="smallflower" viewBox="0 0 30 30">
+            <g transform="translate(15,15)">
+                <ellipse cx="0" cy="-7" rx="3.5" ry="7" fill="url(#fp1)" transform="rotate(0)"/>
+                <ellipse cx="0" cy="-7" rx="3.5" ry="7" fill="url(#fp2)" transform="rotate(72)"/>
+                <ellipse cx="0" cy="-7" rx="3.5" ry="7" fill="url(#fp1)" transform="rotate(144)"/>
+                <ellipse cx="0" cy="-7" rx="3.5" ry="7" fill="url(#fp2)" transform="rotate(216)"/>
+                <ellipse cx="0" cy="-7" rx="3.5" ry="7" fill="url(#fp1)" transform="rotate(288)"/>
+                <circle cx="0" cy="0" r="3.5" fill="#D81B60"/>
+            </g>
+        </symbol>
+    </svg>
+
+    <script>
+        // ===== FLORES QUE CAEN =====
+        const container = document.getElementById('flowersContainer');
+        const types = ['petal1', 'petal2', 'smallflower'];
+
+        function createFlower() {
+            const flower = document.createElement('div');
+            flower.classList.add('flower');
+            const type = types[Math.floor(Math.random() * types.length)];
+            const size = type === 'smallflower' ? 18 + Math.random() * 22 : 10 + Math.random() * 16;
+            const duration = 8 + Math.random() * 10;
+            const delay = Math.random() * 1.5;
+            const startX = Math.random() * 100;
+            const svgNS = 'http://www.w3.org/2000/svg';
+            const svg = document.createElementNS(svgNS, 'svg');
+            svg.setAttribute('width', size);
+            svg.setAttribute('height', size);
+            svg.classList.add('flower-svg');
+            const use = document.createElementNS(svgNS, 'use');
+            use.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#' + type);
+            use.setAttribute('width', '100%');
+            use.setAttribute('height', '100%');
+            svg.appendChild(use);
+            flower.appendChild(svg);
+            flower.style.left = startX + '%';
+            flower.style.animationDuration = duration + 's';
+            flower.style.animationDelay = delay + 's';
+            container.appendChild(flower);
+            setTimeout(() => { if (flower.parentNode) flower.remove(); }, (duration + delay) * 1000 + 500);
+        }
+
+        for (let i = 0; i < 15; i++) setTimeout(() => createFlower(), i * 300);
+        setInterval(createFlower, 800);
+
+        // ===== PARTÍCULAS =====
+        function createSparkle() {
+            const sparkle = document.createElement('div');
+            sparkle.classList.add('sparkle');
+            sparkle.style.left = Math.random() * 100 + '%';
+            sparkle.style.top = Math.random() * 100 + '%';
+            const s = 2 + Math.random() * 3;
+            sparkle.style.width = s + 'px';
+            sparkle.style.height = s + 'px';
+            sparkle.style.background = Math.random() > 0.5 ? '#F48FB1' : '#ffffff';
+            sparkle.style.animationDuration = (2 + Math.random() * 2) + 's';
+            sparkle.style.animationDelay = Math.random() * 3 + 's';
+            document.body.appendChild(sparkle);
+            setTimeout(() => sparkle.remove(), 6000);
+        }
+        for (let i = 0; i < 20; i++) setTimeout(() => createSparkle(), i * 200);
+        setInterval(createSparkle, 1000);
+
+        // ===== TEXTO DESPUÉS DEL BROTE =====
+        setTimeout(() => { document.getElementById('teAmo').classList.add('visible'); }, 3200);
+        setTimeout(() => { document.getElementById('mainTitle').classList.add('visible'); }, 3600);
+        setTimeout(() => { document.getElementById('bouquetWrapper').classList.add('floated'); }, 3500);
+    </script>
+</body>
+</html>
